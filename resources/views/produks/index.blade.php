@@ -32,7 +32,7 @@
                 <div class="bg-white overflow-hidden shadow rounded-lg product-card">
                     <div class="p-4">
                         @if($produk->gambarProduks->isNotEmpty())
-                            <img src="{{ asset('storage/' . $produk->gambarProduks->first()->nama_file) }}" alt="{{ $produk->nama_produk }}" class="w-full h-48 object-cover rounded-md">
+                            <img src="{{ asset('storage/produks/' . $produk->gambarProduks->first()->nama_file) }}" alt="{{ $produk->nama_produk }}" class="w-full h-48 object-cover rounded-md">
                         @else
                             <div class="w-full h-48 bg-gray-200 rounded-md flex items-center justify-center">
                                 <span class="text-gray-500">No Image</span>

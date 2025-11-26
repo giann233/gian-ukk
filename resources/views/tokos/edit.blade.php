@@ -1,63 +1,82 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Toko</title>
-    @vite('resources/css/app.css')
-</head>
-<body class="bg-gray-100">
-    <header class="bg-white shadow">
-        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-            <h1 class="text-3xl font-bold text-gray-900">Edit Toko</h1>
+<x-app-layout>
+    <x-slot name="header">
+        <div class="flex justify-between items-center">
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                {{ __('Edit Toko') }}
+            </h2>
+            @php
+                $indexRoute = auth()->user()->role === 'admin' ? 'admin.tokos.index' : 'tokos.index';
+                $updateRoute = auth()->user()->role === 'admin' ? 'admin.tokos.update' : 'tokos.update';
+            @endphp
+            <x-secondary-button href="{{ route($indexRoute) }}">
+                {{ __('Batal') }}
+            </x-secondary-button>
         </div>
-    </header>
+    </x-slot>
 
-    <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        <div class="px-4 py-6 sm:px-0">
-            <div class="bg-white shadow rounded-lg p-6">
-                <form action="{{ route('tokos.update', $toko->id) }}" method="POST" enctype="multipart/form-data">
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
+                @if($errors->any())
+                    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6 mx-6 mt-6">
+                        <ul>
+                            @foreach($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
+                <form action="{{ route($updateRoute, $toko->id) }}" method="POST" enctype="multipart/form-data" class="p-6">
                     @csrf
                     @method('PUT')
 
                     <div class="mb-4">
-                        <label for="nama_toko" class="block text-sm font-medium text-gray-700">Nama Toko</label>
-                        <input type="text" name="nama_toko" id="nama_toko" value="{{ old('nama_toko', $toko->nama_toko) }}" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required>
+                        <x-input-label for="nama_toko" :value="__('Nama Toko')" />
+                        <x-text-input id="nama_toko" class="block mt-1 w-full" type="text" name="nama_toko" :value="old('nama_toko', $toko->nama_toko)" required autofocus autocomplete="nama_toko" />
+                        <x-input-error :messages="$errors->get('nama_toko')" class="mt-2" />
                     </div>
 
                     <div class="mb-4">
-                        <label for="deskripsi" class="block text-sm font-medium text-gray-700">Deskripsi</label>
-                        <textarea name="deskripsi" id="deskripsi" rows="3" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">{{ old('deskripsi', $toko->deskripsi) }}</textarea>
+                        <x-input-label for="deskripsi" :value="__('Deskripsi')" />
+                        <textarea id="deskripsi" class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" name="deskripsi" rows="4">{{ old('deskripsi', $toko->deskripsi) }}</textarea>
+                        <x-input-error :messages="$errors->get('deskripsi')" class="mt-2" />
                     </div>
 
                     <div class="mb-4">
-                        <label for="gambar" class="block text-sm font-medium text-gray-700">Gambar Toko</label>
+                        <x-input-label for="gambar" :value="__('Gambar Toko')" />
                         @if($toko->gambar)
                             <div class="mb-2">
                                 <img src="{{ asset('storage/' . $toko->gambar) }}" alt="Current Image" class="w-32 h-32 object-cover rounded-md">
                             </div>
                         @endif
-                        <input type="file" name="gambar" id="gambar" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" accept="image/*">
+                        <input id="gambar" class="block mt-1 w-full" type="file" name="gambar" accept="image/*" />
                         <p class="text-sm text-gray-500 mt-1">Biarkan kosong jika tidak ingin mengubah gambar.</p>
+                        <x-input-error :messages="$errors->get('gambar')" class="mt-2" />
                     </div>
 
                     <div class="mb-4">
-                        <label for="kontak_toko" class="block text-sm font-medium text-gray-700">Kontak Toko</label>
-                        <input type="text" name="kontak_toko" id="kontak_toko" value="{{ old('kontak_toko', $toko->kontak_toko) }}" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                        <x-input-label for="kontak_toko" :value="__('Kontak Toko')" />
+                        <x-text-input id="kontak_toko" class="block mt-1 w-full" type="text" name="kontak_toko" :value="old('kontak_toko', $toko->kontak_toko)" autocomplete="kontak_toko" />
+                        <x-input-error :messages="$errors->get('kontak_toko')" class="mt-2" />
                     </div>
 
                     <div class="mb-4">
-                        <label for="alamat" class="block text-sm font-medium text-gray-700">Alamat</label>
-                        <textarea name="alamat" id="alamat" rows="3" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">{{ old('alamat', $toko->alamat) }}</textarea>
+                        <x-input-label for="alamat" :value="__('Alamat')" />
+                        <textarea id="alamat" class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" name="alamat" rows="3">{{ old('alamat', $toko->alamat) }}</textarea>
+                        <x-input-error :messages="$errors->get('alamat')" class="mt-2" />
                     </div>
 
-                    <div class="flex justify-end">
-                        <a href="{{ route('tokos.index') }}" class="bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-700 mr-2">Batal</a>
-                        <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700">Simpan Perubahan</button>
+                    <div class="flex items-center justify-end mt-6">
+                        <x-secondary-button href="{{ route($indexRoute) }}" class="mr-4">
+                            {{ __('Batal') }}
+                        </x-secondary-button>
+                        <x-primary-button>
+                            {{ __('Simpan Perubahan') }}
+                        </x-primary-button>
                     </div>
                 </form>
             </div>
         </div>
-    </main>
-</body>
-</html>
+    </div>
+</x-app-layout>

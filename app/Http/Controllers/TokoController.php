@@ -17,6 +17,10 @@ class TokoController extends Controller
         // Management features (edit/delete) are controlled by the view based on ownership
         $tokos = Toko::with('user')->paginate(10);
 
+        if (request()->routeIs('admin.*')) {
+            return view('admin.tokos.index', compact('tokos'));
+        }
+
         return view('tokos.index', compact('tokos'));
     }
 
@@ -26,6 +30,11 @@ class TokoController extends Controller
     public function create()
     {
         $users = \App\Models\User::where('role', 'member')->get();
+
+        if (request()->routeIs('admin.*')) {
+            return view('admin.tokos.create', compact('users'));
+        }
+
         return view('tokos.create', compact('users'));
     }
 
@@ -79,6 +88,10 @@ class TokoController extends Controller
         $toko = Toko::with(['user', 'produks.kategori', 'produks.gambarProduks'])->findOrFail($id);
 
         // Members can view all stores for browsing
+        if (request()->routeIs('admin.*')) {
+            return view('admin.tokos.show', compact('toko'));
+        }
+
         return view('tokos.show', compact('toko'));
     }
 
@@ -142,6 +155,26 @@ class TokoController extends Controller
 
         $toko->delete();
 
-        return redirect()->route('tokos.index')->with('success', 'Toko berhasil dihapus.');
+        if (auth()->user()->role === 'admin') {
+            return redirect()->route('admin.tokos.index')->with('success', 'Toko berhasil dihapus.');
+        } else {
+            return redirect()->route('tokos.index')->with('success', 'Toko berhasil dihapus.');
+        }
+    }
+
+    /**
+     * Show the member's own toko or create form if none exists.
+     */
+    public function myToko()
+    {
+        $toko = Toko::where('id_user', auth()->id())->first();
+
+        if ($toko) {
+            // If member has a toko, show it
+            return view('tokos.show', compact('toko'));
+        } else {
+            // If no toko, redirect to create form
+            return redirect()->route('tokos.create')->with('info', 'Anda belum memiliki toko. Silakan buat toko terlebih dahulu.');
+        }
     }
 }

@@ -21,6 +21,10 @@ class KategoriController extends Controller
      */
     public function create()
     {
+        if (request()->routeIs('admin.*')) {
+            return view('admin.kategoris.create');
+        }
+
         return view('kategoris.create');
     }
 
@@ -30,7 +34,7 @@ class KategoriController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nama_kategori' => 'required|string|max:255|unique:kategoris',
+            'nama_kategori' => 'required|string|max:255|unique:kategori',
         ]);
 
         Kategori::create($request->all());
@@ -44,6 +48,11 @@ class KategoriController extends Controller
     public function show(string $id)
     {
         $kategori = Kategori::findOrFail($id);
+
+        if (request()->routeIs('admin.*')) {
+            return view('admin.kategoris.show', compact('kategori'));
+        }
+
         return view('kategoris.show', compact('kategori'));
     }
 
@@ -62,7 +71,7 @@ class KategoriController extends Controller
     public function update(Request $request, string $id)
     {
         $request->validate([
-            'nama_kategori' => 'required|string|max:255|unique:kategoris,nama_kategori,' . $id,
+            'nama_kategori' => 'required|string|max:255|unique:kategori,nama_kategori,' . $id,
         ]);
 
         $kategori = Kategori::findOrFail($id);

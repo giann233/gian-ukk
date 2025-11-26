@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\DashboardController;
 
 require __DIR__.'/auth.php';
@@ -74,6 +75,12 @@ Route::middleware('auth')->group(function () {
     Route::middleware('member')->group(function () {
         Route::get('toko_requests/create', [App\Http\Controllers\TokoRequestController::class, 'create'])->name('toko_requests.create');
         Route::post('toko_requests', [App\Http\Controllers\TokoRequestController::class, 'store'])->name('toko_requests.store');
+
+        Route::get('/produk/create',[ProdukController::class,'tambah'])->name('produk.tambah');
+        Route::post('produk/store',[ProdukController::class,'store'])->name('produk.store');
+        Route::get('/produk/edit/{id}',[ProdukController::class,'edit'])->name('produk.edit');
+        Route::put('/produk/update/{id}',[ProdukController::class,'update'])->name('produk.update');
+        Route::delete('/produk/delete/{id}',[ProdukController::class,'destroy'])->name('produk.destroy');
     });
 
     Route::resource('toko_requests', App\Http\Controllers\TokoRequestController::class)->except(['create', 'store']);

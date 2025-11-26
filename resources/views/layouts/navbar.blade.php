@@ -48,8 +48,8 @@
                             @else
                                 <li><a class="dropdown-item" href="{{ route('toko_requests.index') }}">Permintaan Toko</a></li>
                                 <li><a class="dropdown-item" href="{{ route('tokos.my') }}">Toko Saya</a></li>
-                                <li><a class="dropdown-item" href="{{ route('tokos.create') }}">Tambah Toko</a></li>
-                                <li><a class="dropdown-item" href="{{ route('produks.create') }}">Tambah Produk</a></li>
+                                {{-- <li><a class="dropdown-item" href="{{ route('tokos.create') }}">Tambah Toko</a></li> --}}
+                                <li><a class="dropdown-item" href="{{ route('produk.tambah') }}">Tambah Produk</a></li>
                                 <li><a class="dropdown-item" href="{{ route('tokos.index') }}">Lihat Toko</a></li>
                                 <li><a class="dropdown-item" href="{{ route('produks.index') }}">Lihat Produk</a></li>
                             @endif

@@ -14,7 +14,7 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background: #ffffff;
+            background: #FFFFFFFF;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             overflow: hidden;
         }
@@ -56,7 +56,7 @@
             height: 50px;
             border-radius: 50%;
             cursor: pointer;
-            background: #f1f1f1;
+            background: #E4E2E2FF;
             color: #666;
             font-size: 18px;
             transition: all 0.3s ease;

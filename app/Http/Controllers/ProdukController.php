@@ -170,4 +170,19 @@ class ProdukController extends Controller
 
         return redirect()->route('produks.index')->with('success', 'Produk berhasil dihapus.');
     }
+     public function tambah()
+    {
+        $kategoris = Kategori::all();
+        if (auth()->user()->role === 'member') {
+            $tokos = Toko::all();
+        } else {
+            $tokos = Toko::where('id_user', Auth::id())->get();
+            if ($tokos->isEmpty()) {
+                return redirect()->route('tokos.create')->with('warning', 'Anda belum memiliki toko. Silakan buat toko terlebih dahulu sebelum menambah produk.');
+            }
+        }
+        return view('produks.create', compact('kategoris', 'tokos'));
+    }
+
+
 }
